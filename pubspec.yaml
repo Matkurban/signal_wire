@@ -1,7 +1,9 @@
 name: signal_wire
 description: "Lightweight pure-Dart Flutter DI and lifecycle manager built on signals_flutter with automatic signal/effect disposal and zero routing lock-in."
 version: 1.0.0
-homepage:
+homepage: https://github.com/Matkurban/signal_wire
+repository: https://github.com/Matkurban/signal_wire
+issue_tracker: https://github.com/Matkurban/signal_wire/issues
 
 topics:
   - signals
