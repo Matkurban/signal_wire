@@ -38,8 +38,8 @@ import 'package:signal_wire/signal_wire.dart';
 - **异步与流**：`createAsyncSignal`、`createFutureSignal`、`createStreamSignal`、`createComputedAsync`、`createComputedFrom`、`createTimerSignal`、`createConnect`
 - **通用托管**：`trackSignal`（一键托管 `LinkedSignal`、`PersistedSignal`、`TickerSignal` 等任意信号）与 `autoDispose(VoidCallback)`
 
-### `WireController extends WireDisposable`（页面/局部控制器）
-面向 UI 视图层，额外提供 `onReady()` 钩子，通过 `WidgetsBinding.instance.addPostFrameCallback` 在首帧渲染完成后触发（若在首帧前已被销毁则自动跳过）。默认随所属页面或作用域卸载而自动销毁。
+### `WireController extends WireDisposable` 与 `WireReadyMixin`（按需首帧就绪）
+面向 UI 视图层，默认随所属页面或作用域卸载而自动销毁。普通 `WireController` **默认不注册任何首帧帧回调**（零冗余开销）；仅在确实需要首帧渲染完成后执行逻辑时，按需混入 `WireReadyMixin`（`class HomeController extends WireController with WireReadyMixin`），即可获得经 `WidgetsBinding.instance.addPostFrameCallback` 调度的 `onReady()` 钩子（若在首帧前已被销毁则自动跳过）。
 
 ### `WireService extends WireDisposable`（全局常驻服务）
 面向全局常驻能力（用户鉴权、IM 长连接、本地存储等），脱离 UI 渲染周期（无 `onReady()`）。注册进容器时默认开启 `permanent: true` 常驻保护，防止被普通 `Wire.delete()` 误删（仅当显式传入 `force: true` 时销毁）。

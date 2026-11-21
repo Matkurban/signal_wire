@@ -9,7 +9,7 @@ import '../models/work_task.dart';
 /// 演示在单个控制器中组合使用 [createListSignal]、[createSetSignal]、
 /// [createFutureSignal]、[createComputed] 与 [createEffect]，
 /// 并在页面退出时由 `WireView` 自动回收全部资源。
-class TaskBoardController extends WireController {
+class TaskBoardController extends WireController with WireReadyMixin {
   /// 全部任务列表信号。
   ///
   /// Reactive list of all tasks on the board.

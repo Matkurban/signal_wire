@@ -1,7 +1,7 @@
 import 'package:flutter/scheduler.dart';
 
-import '../core/wire_controller.dart';
 import '../core/wire_disposable.dart';
+import '../core/wire_ready_mixin.dart';
 import '../core/wire_service.dart';
 import '../log/wire_log_category.dart';
 import '../log/wire_logger.dart';
@@ -16,7 +16,7 @@ import 'wire_not_found_exception.dart';
 /// 支持按类型与可选 `tag` 管理实例的注册、异步初始化、懒加载（含 `fenix` 自动重建）、
 /// 查找与生命周期自动回收：
 /// - 注册 [WireDisposable] 时自动调用 `onInit()`。
-/// - 注册 [WireController] 时额外排程首帧 `onReady()`。
+/// - 仅当实例按需混入 [WireReadyMixin] 时额外排程首帧 `onReady()`。
 /// - 注册 [WireService] 时默认开启 `permanent: true` 常驻保护。
 /// - 所有关键操作均通过 `WireLogger` 输出结构化分级日志。
 ///
@@ -458,14 +458,15 @@ abstract final class Wire {
     }
   }
 
-  /// 触发已注册实例的生命周期初始化钩子。
+  /// 触发已注册实例的生命周期初始化钩子（仅对混入 [WireReadyMixin] 的实例排程首帧回调）。
   ///
-  /// Triggers lifecycle initialization hooks for a newly registered instance.
+  /// Triggers lifecycle initialization hooks, scheduling post-frame `onReady()`
+  /// only for instances mixing in [WireReadyMixin].
   static void _initializeLifecycle(Object? instance) {
     if (instance is WireDisposable) {
       instance.internalInit();
     }
-    if (instance is WireController) {
+    if (instance is WireReadyMixin) {
       instance.internalReady();
     }
   }

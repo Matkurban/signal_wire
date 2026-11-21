@@ -16,6 +16,7 @@ export 'package:signals_flutter/signals_flutter.dart';
 
 export 'src/core/wire_controller.dart';
 export 'src/core/wire_disposable.dart';
+export 'src/core/wire_ready_mixin.dart';
 export 'src/core/wire_service.dart';
 export 'src/di/wire.dart';
 export 'src/di/wire_not_found_exception.dart';

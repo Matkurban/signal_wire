@@ -1,10 +1,10 @@
 import 'package:signal_wire/signal_wire.dart';
 
-/// 用于验证 [WireController] 完整生命周期与信号响应性的测试控制器。
+/// 用于验证 [WireController] 与 [WireReadyMixin] 完整生命周期与信号响应性的测试控制器。
 ///
-/// Test controller for verifying [WireController] lifecycle hooks and
-/// signal reactivity.
-class TestController extends WireController {
+/// Test controller mixing in [WireReadyMixin] for verifying lifecycle hooks
+/// and signal reactivity.
+class TestController extends WireController with WireReadyMixin {
   /// 创建一个带有可选标识名称与初始计数的测试控制器。
   ///
   /// Creates a [TestController] with an optional [label] and [initialCount].

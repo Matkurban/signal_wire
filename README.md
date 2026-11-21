@@ -38,8 +38,8 @@ Supported lifecycle-managed factories (all accept standard `signals_flutter` `op
 - **Async & Streams**: `createAsyncSignal`, `createFutureSignal`, `createStreamSignal`, `createComputedAsync`, `createComputedFrom`, `createTimerSignal`, `createConnect`
 - **Generic**: `trackSignal` (for `LinkedSignal`, `PersistedSignal`, `TickerSignal`, etc.) and `autoDispose(VoidCallback)`
 
-### `WireController extends WireDisposable`
-Designed for page-scoped or widget-scoped logic. Adds `onReady()` invoked automatically after the first rendered frame via `WidgetsBinding.instance.addPostFrameCallback` (automatically skipped if the controller closes before the frame completes).
+### `WireController extends WireDisposable` & `WireReadyMixin`
+Designed for page-scoped or widget-scoped logic. Plain `WireController` subclasses register **zero** post-frame callbacks by default. When you genuinely need a callback after the first rendered frame, mix in `WireReadyMixin` on demand (`class HomeController extends WireController with WireReadyMixin`) to opt into `onReady()` via `WidgetsBinding.instance.addPostFrameCallback` (automatically skipped if closed before the frame completes).
 
 ### `WireService extends WireDisposable`
 Designed for globally persistent services (auth, IM socket, local storage). Decoupled from UI frames (no `onReady()`) and automatically registered with `permanent: true` so regular `Wire.delete()` cannot accidentally remove it (requires `force: true`).
