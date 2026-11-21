@@ -1,0 +1,19 @@
+name: signal_wire
+description: "A lightweight pure-Dart Flutter state management and dependency injection package combining signals_flutter reactive state with automatic lifecycle disposal."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.13.0
+  flutter: '>=3.47.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.19.0
+  signals_flutter: ^7.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
