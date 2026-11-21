@@ -31,15 +31,18 @@ class DraftEditorController extends WireController {
   @override
   void onInit() {
     super.onInit();
-    score = createTrackedSignal<int>(10, debugLabel: 'editor_tracked_score');
+    score = createTrackedSignal<int>(
+      10,
+      options: const TrackedSignalOptions<int>(name: 'editor_tracked_score'),
+    );
     draft = createChangeStackSignal<String>(
       'Initial spec v1',
       limit: 20,
-      debugLabel: 'editor_draft_stack',
+      options: const ChangeSignalOptions<String>(name: 'editor_draft_stack'),
     );
     charCount = createComputed<int>(
       () => draft.value.length,
-      debugLabel: 'editor_char_count',
+      options: const ComputedOptions<int>(name: 'editor_char_count'),
     );
   }
 

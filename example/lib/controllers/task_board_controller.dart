@@ -65,14 +65,17 @@ class TaskBoardController extends WireController {
         title: 'Write end-to-end widget tests',
         tag: 'Test',
       ),
-    ], debugLabel: 'board_tasks');
+    ], options: const ListSignalOptions<WorkTask>(name: 'board_tasks'));
 
-    activeTags = createSetSignal<String>(<String>{}, debugLabel: 'board_tags');
+    activeTags = createSetSignal<String>(
+      <String>{},
+      options: const SetSignalOptions<String>(name: 'board_tags'),
+    );
 
     syncStatus = createFutureSignal<String>(() async {
       await Future<void>.delayed(const Duration(milliseconds: 60));
       return 'Synced ${tasks.length} tasks';
-    }, debugLabel: 'board_sync');
+    }, options: const AsyncSignalOptions<String>(name: 'board_sync'));
 
     filteredTasks = createComputed<List<WorkTask>>(() {
       final Set<String> selected = activeTags.value;
@@ -82,19 +85,22 @@ class TaskBoardController extends WireController {
       return tasks.value
           .where((WorkTask item) => selected.contains(item.tag))
           .toList(growable: false);
-    }, debugLabel: 'board_filtered');
+    }, options: const ComputedOptions<List<WorkTask>>(name: 'board_filtered'));
 
     completedCount = createComputed<int>(
       () => tasks.value.where((WorkTask item) => item.completed).length,
-      debugLabel: 'board_completed_count',
+      options: const ComputedOptions<int>(name: 'board_completed_count'),
     );
 
-    progressNote = createSignal<String>('', debugLabel: 'board_progress_note');
+    progressNote = createSignal<String>(
+      '',
+      options: const SignalOptions<String>(name: 'board_progress_note'),
+    );
 
     createEffect(() {
       progressNote.value =
           'Completed ${completedCount.value} of ${tasks.value.length} tasks';
-    }, debugLabel: 'board_progress_effect');
+    }, options: const EffectOptions(name: 'board_progress_effect'));
   }
 
   /// 切换指定标签的筛选选中状态。

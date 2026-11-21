@@ -23,10 +23,13 @@ class AuthService extends WireService {
   @override
   void onInit() {
     super.onInit();
-    username = createSignal<String?>(null, debugLabel: 'auth_username');
+    username = createSignal<String?>(
+      null,
+      options: const SignalOptions<String?>(name: 'auth_username'),
+    );
     isSignedIn = createComputed<bool>(
       () => username.value != null,
-      debugLabel: 'auth_is_signed_in',
+      options: const ComputedOptions<bool>(name: 'auth_is_signed_in'),
     );
   }
 

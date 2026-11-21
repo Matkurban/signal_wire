@@ -36,7 +36,10 @@ class TestService extends WireService {
   void onInit() {
     super.onInit();
     initCount++;
-    currentUser = createSignal<String>('guest', debugLabel: 'service_user');
+    currentUser = createSignal<String>(
+      'guest',
+      options: const SignalOptions<String>(name: 'service_user'),
+    );
   }
 
   /// 更新当前登录用户名称。

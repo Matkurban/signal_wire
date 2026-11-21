@@ -42,20 +42,21 @@ class ProjectScopeController extends WireController {
   @override
   void onInit() {
     super.onInit();
-    memberPresence = createMapSignal<String, bool>(<String, bool>{
-      'Alice': true,
-      'Bob': false,
-      'Charlie': true,
-    }, debugLabel: 'room_${roomName}_presence');
+    memberPresence = createMapSignal<String, bool>(
+      <String, bool>{'Alice': true, 'Bob': false, 'Charlie': true},
+      options: MapSignalOptions<String, bool>(
+        name: 'room_${roomName}_presence',
+      ),
+    );
 
     notifications = createQueueSignal<String>(
       Queue<String>.from(<String>['Welcome to $roomName']),
-      debugLabel: 'room_${roomName}_queue',
+      options: QueueSignalOptions<String>(name: 'room_${roomName}_queue'),
     );
 
     onlineCount = createComputed<int>(
       () => memberPresence.values.where((bool online) => online).length,
-      debugLabel: 'room_${roomName}_online',
+      options: ComputedOptions<int>(name: 'room_${roomName}_online'),
     );
   }
 

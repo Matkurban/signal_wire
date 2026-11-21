@@ -76,23 +76,11 @@ abstract class WireDisposable {
   /// Creates a mutable [FlutterSignal] bound to this instance's lifecycle.
   ///
   /// - [value]：信号初始值。 / Initial signal value.
-  /// - [options]：可选信号配置项。 / Optional [SignalOptions].
-  /// - [debugLabel]：可选调试名称（当 [options] 为空时映射至 [SignalOptions.name]）。
-  ///   Optional debug label mapped to [SignalOptions.name] when [options] is
-  ///   omitted.
+  /// - [options]：可选信号配置项（包含名称、监听回调等）。 / Optional
+  ///   [SignalOptions] (supports `name`, lifecycle hooks, etc.).
   @protected
-  FlutterSignal<T> createSignal<T>(
-    T value, {
-    SignalOptions<T>? options,
-    String? debugLabel,
-  }) {
-    final SignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? SignalOptions<T>(name: debugLabel) : null);
-    final FlutterSignal<T> created = signal<T>(
-      value,
-      options: effectiveOptions,
-    );
+  FlutterSignal<T> createSignal<T>(T value, {SignalOptions<T>? options}) {
+    final FlutterSignal<T> created = signal<T>(value, options: options);
     return trackSignal<FlutterSignal<T>>(created);
   }
 
@@ -102,16 +90,9 @@ abstract class WireDisposable {
   /// instance's lifecycle whose value can be assigned later.
   ///
   /// - [options]：可选信号配置项。 / Optional [SignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
-  FlutterSignal<T> createLazySignal<T>({
-    SignalOptions<T>? options,
-    String? debugLabel,
-  }) {
-    final SignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? SignalOptions<T>(name: debugLabel) : null);
-    final FlutterSignal<T> created = lazySignal<T>(options: effectiveOptions);
+  FlutterSignal<T> createLazySignal<T>({SignalOptions<T>? options}) {
+    final FlutterSignal<T> created = lazySignal<T>(options: options);
     return trackSignal<FlutterSignal<T>>(created);
   }
 
@@ -121,20 +102,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：只读信号值。 / Initial read-only value.
   /// - [options]：可选信号配置项。 / Optional [SignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   ReadonlySignal<T> createReadonlySignal<T>(
     T value, {
     SignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final SignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? SignalOptions<T>(name: debugLabel) : null);
-    final ReadonlySignal<T> created = readonly<T>(
-      value,
-      options: effectiveOptions,
-    );
+    final ReadonlySignal<T> created = readonly<T>(value, options: options);
     return trackSignal<ReadonlySignal<T>>(created);
   }
 
@@ -146,20 +119,12 @@ abstract class WireDisposable {
   /// - [compute]：纯计算回调，内部读取的信号会被自动追踪为依赖。 / Pure
   ///   computation callback whose read signals are tracked automatically.
   /// - [options]：可选计算配置项。 / Optional [ComputedOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   FlutterComputed<T> createComputed<T>(
     T Function() compute, {
     ComputedOptions<T>? options,
-    String? debugLabel,
   }) {
-    final ComputedOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? ComputedOptions<T>(name: debugLabel) : null);
-    final FlutterComputed<T> created = computed<T>(
-      compute,
-      options: effectiveOptions,
-    );
+    final FlutterComputed<T> created = computed<T>(compute, options: options);
     return trackSignal<FlutterComputed<T>>(created);
   }
 
@@ -173,17 +138,9 @@ abstract class WireDisposable {
   ///
   /// - [compute]：副作用回调。 / Side-effect callback.
   /// - [options]：可选副作用配置项。 / Optional [EffectOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
-  EffectCleanup createEffect(
-    Function() compute, {
-    EffectOptions? options,
-    String? debugLabel,
-  }) {
-    final EffectOptions? effectiveOptions =
-        options ??
-        (debugLabel != null ? EffectOptions(name: debugLabel) : null);
-    final EffectCleanup rawCleanup = effect(compute, options: effectiveOptions);
+  EffectCleanup createEffect(Function() compute, {EffectOptions? options}) {
+    final EffectCleanup rawCleanup = effect(compute, options: options);
     bool cleaned = false;
     void safeCleanup() {
       if (cleaned) {
@@ -207,20 +164,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始列表。 / Initial list elements.
   /// - [options]：可选列表信号配置项。 / Optional [ListSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   ListSignal<T> createListSignal<T>(
     List<T> value, {
     ListSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final ListSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? ListSignalOptions<T>(name: debugLabel) : null);
-    final ListSignal<T> created = listSignal<T>(
-      value,
-      options: effectiveOptions,
-    );
+    final ListSignal<T> created = listSignal<T>(value, options: options);
     return trackSignal<ListSignal<T>>(created);
   }
 
@@ -230,17 +179,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始集合。 / Initial set elements.
   /// - [options]：可选集合信号配置项。 / Optional [SetSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   SetSignal<T> createSetSignal<T>(
     Set<T> value, {
     SetSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final SetSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? SetSignalOptions<T>(name: debugLabel) : null);
-    final SetSignal<T> created = setSignal<T>(value, options: effectiveOptions);
+    final SetSignal<T> created = setSignal<T>(value, options: options);
     return trackSignal<SetSignal<T>>(created);
   }
 
@@ -250,20 +194,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始键值对映射。 / Initial map entries.
   /// - [options]：可选映射表信号配置项。 / Optional [MapSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   MapSignal<K, V> createMapSignal<K, V>(
     Map<K, V> value, {
     MapSignalOptions<K, V>? options,
-    String? debugLabel,
   }) {
-    final MapSignalOptions<K, V>? effectiveOptions =
-        options ??
-        (debugLabel != null ? MapSignalOptions<K, V>(name: debugLabel) : null);
-    final MapSignal<K, V> created = mapSignal<K, V>(
-      value,
-      options: effectiveOptions,
-    );
+    final MapSignal<K, V> created = mapSignal<K, V>(value, options: options);
     return trackSignal<MapSignal<K, V>>(created);
   }
 
@@ -273,21 +209,14 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始可迭代对象。 / Initial iterable elements.
   /// - [options]：可选配置项。 / Optional [IterableSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   IterableSignal<T> createIterableSignal<T>(
     Iterable<T> value, {
     IterableSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final IterableSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null
-            ? IterableSignalOptions<T>(name: debugLabel)
-            : null);
     final IterableSignal<T> created = iterableSignal<T>(
       value,
-      options: effectiveOptions,
+      options: options,
     );
     return trackSignal<IterableSignal<T>>(created);
   }
@@ -298,20 +227,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始队列。 / Initial [Queue] elements.
   /// - [options]：可选队列信号配置项。 / Optional [QueueSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   QueueSignal<T> createQueueSignal<T>(
     Queue<T> value, {
     QueueSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final QueueSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? QueueSignalOptions<T>(name: debugLabel) : null);
-    final QueueSignal<T> created = queueSignal<T>(
-      value,
-      options: effectiveOptions,
-    );
+    final QueueSignal<T> created = queueSignal<T>(value, options: options);
     return trackSignal<QueueSignal<T>>(created);
   }
 
@@ -327,21 +248,16 @@ abstract class WireDisposable {
   /// - [value]：初始值。 / Initial value.
   /// - [limit]：可选最大历史记录条数限制。 / Optional max history stack size.
   /// - [options]：可选变更栈信号配置项。 / Optional [ChangeSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   ChangeStackSignal<T> createChangeStackSignal<T>(
     T value, {
     int? limit,
     ChangeSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final ChangeSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? ChangeSignalOptions<T>(name: debugLabel) : null);
     final ChangeStackSignal<T> created = changeStack<T>(
       value,
       limit: limit,
-      options: effectiveOptions,
+      options: options,
     );
     return trackSignal<ChangeStackSignal<T>>(created);
   }
@@ -353,20 +269,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始值。 / Initial value.
   /// - [options]：可选追踪信号配置项。 / Optional [TrackedSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   TrackedSignal<T> createTrackedSignal<T>(
     T value, {
     TrackedSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final TrackedSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? TrackedSignalOptions<T>(name: debugLabel) : null);
-    final TrackedSignal<T> created = trackedSignal<T>(
-      value,
-      options: effectiveOptions,
-    );
+    final TrackedSignal<T> created = trackedSignal<T>(value, options: options);
     return trackSignal<TrackedSignal<T>>(created);
   }
 
@@ -381,20 +289,12 @@ abstract class WireDisposable {
   ///
   /// - [value]：初始异步状态（如 `AsyncState.loading()`）。 / Initial [AsyncState].
   /// - [options]：可选异步信号配置项。 / Optional [AsyncSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   AsyncSignal<T> createAsyncSignal<T>(
     AsyncState<T> value, {
     AsyncSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? AsyncSignalOptions<T>(name: debugLabel) : null);
-    final AsyncSignal<T> created = asyncSignal<T>(
-      value,
-      options: effectiveOptions,
-    );
+    final AsyncSignal<T> created = asyncSignal<T>(value, options: options);
     return trackSignal<AsyncSignal<T>>(created);
   }
 
@@ -406,20 +306,12 @@ abstract class WireDisposable {
   /// - [compute]：返回 [Future] 的异步计算函数。 / Async computation callback.
   /// - [options]：可选异步信号配置项（支持显式 `dependencies` 与 `initialValue`）。
   ///   Optional [AsyncSignalOptions] (supports `dependencies` & `initialValue`).
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   FutureSignal<T> createFutureSignal<T>(
     Future<T> Function() compute, {
     AsyncSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? AsyncSignalOptions<T>(name: debugLabel) : null);
-    final FutureSignal<T> created = futureSignal<T>(
-      compute,
-      options: effectiveOptions,
-    );
+    final FutureSignal<T> created = futureSignal<T>(compute, options: options);
     return trackSignal<FutureSignal<T>>(created);
   }
 
@@ -430,20 +322,12 @@ abstract class WireDisposable {
   ///
   /// - [compute]：返回 [Stream] 的流工厂函数。 / Stream factory callback.
   /// - [options]：可选异步信号配置项。 / Optional [AsyncSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   StreamSignal<T> createStreamSignal<T>(
     Stream<T> Function() compute, {
     AsyncSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? AsyncSignalOptions<T>(name: debugLabel) : null);
-    final StreamSignal<T> created = streamSignal<T>(
-      compute,
-      options: effectiveOptions,
-    );
+    final StreamSignal<T> created = streamSignal<T>(compute, options: options);
     return trackSignal<StreamSignal<T>>(created);
   }
 
@@ -454,20 +338,12 @@ abstract class WireDisposable {
   ///
   /// - [compute]：异步计算函数。 / Async computation callback.
   /// - [options]：可选异步信号配置项。 / Optional [AsyncSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   FutureSignal<T> createComputedAsync<T>(
     Future<T> Function() compute, {
     AsyncSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? AsyncSignalOptions<T>(name: debugLabel) : null);
-    final FutureSignal<T> created = computedAsync<T>(
-      compute,
-      options: effectiveOptions,
-    );
+    final FutureSignal<T> created = computedAsync<T>(compute, options: options);
     return trackSignal<FutureSignal<T>>(created);
   }
 
@@ -479,21 +355,16 @@ abstract class WireDisposable {
   /// - [signals]：显式依赖的只读信号列表。 / Explicit dependency signal list.
   /// - [compute]：接收解析后依赖值列表的异步计算函数。 / Async computation callback.
   /// - [options]：可选异步信号配置项。 / Optional [AsyncSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   FutureSignal<T> createComputedFrom<T, A>(
     List<ReadonlySignal<A>> signals,
     Future<T> Function(List<A> args) compute, {
     AsyncSignalOptions<T>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<T>? effectiveOptions =
-        options ??
-        (debugLabel != null ? AsyncSignalOptions<T>(name: debugLabel) : null);
     final FutureSignal<T> created = computedFrom<T, A>(
       signals,
       compute,
-      options: effectiveOptions,
+      options: options,
     );
     return trackSignal<FutureSignal<T>>(created);
   }
@@ -505,23 +376,16 @@ abstract class WireDisposable {
   /// - [every]：周期触发间隔。 / Interval duration between timer ticks.
   /// - [cancelOnError]：发生错误时是否取消定时流。 / Whether to cancel on error.
   /// - [options]：可选异步信号配置项。 / Optional [AsyncSignalOptions].
-  /// - [debugLabel]：可选调试名称。 / Optional debug label.
   @protected
   TimerSignal createTimerSignal(
     Duration every, {
     bool? cancelOnError,
     AsyncSignalOptions<TimerSignalEvent>? options,
-    String? debugLabel,
   }) {
-    final AsyncSignalOptions<TimerSignalEvent>? effectiveOptions =
-        options ??
-        (debugLabel != null
-            ? AsyncSignalOptions<TimerSignalEvent>(name: debugLabel)
-            : null);
     final TimerSignal created = timerSignal(
       every,
       cancelOnError: cancelOnError,
-      options: effectiveOptions,
+      options: options,
     );
     return trackSignal<TimerSignal>(created);
   }

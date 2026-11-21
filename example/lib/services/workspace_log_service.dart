@@ -32,7 +32,9 @@ class WorkspaceLogService extends WireService {
     super.onInit();
     records = createListSignal<WireLogRecord>(
       <WireLogRecord>[],
-      debugLabel: 'workspace_log_records',
+      options: const ListSignalOptions<WireLogRecord>(
+        name: 'workspace_log_records',
+      ),
     );
   }
 

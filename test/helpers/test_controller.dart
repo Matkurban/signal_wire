@@ -63,14 +63,17 @@ class TestController extends WireController {
     super.onInit();
     initCount++;
     events.add('onInit');
-    count = createSignal<int>(initialCount, debugLabel: 'ctrl_count_$label');
+    count = createSignal<int>(
+      initialCount,
+      options: SignalOptions<int>(name: 'ctrl_count_$label'),
+    );
     summary = createComputed<String>(
       () => '$label:${count.value}',
-      debugLabel: 'ctrl_summary_$label',
+      options: ComputedOptions<String>(name: 'ctrl_summary_$label'),
     );
     createEffect(() {
       effectValues.add(count.value);
-    }, debugLabel: 'ctrl_effect_$label');
+    }, options: EffectOptions(name: 'ctrl_effect_$label'));
   }
 
   @override

@@ -44,14 +44,17 @@ class TestDisposable extends WireDisposable {
   void onInit() {
     super.onInit();
     initCount++;
-    count = createSignal<int>(0, debugLabel: 'test_count');
+    count = createSignal<int>(
+      0,
+      options: const SignalOptions<int>(name: 'test_count'),
+    );
     doubled = createComputed<int>(
       () => count.value * 2,
-      debugLabel: 'test_doubled',
+      options: const ComputedOptions<int>(name: 'test_doubled'),
     );
     disposeEffect = createEffect(() {
       effectLog.add(count.value);
-    }, debugLabel: 'test_effect');
+    }, options: const EffectOptions(name: 'test_effect'));
     autoDispose(() => cleanupOrder.add('first'));
     autoDispose(() => cleanupOrder.add('second'));
   }

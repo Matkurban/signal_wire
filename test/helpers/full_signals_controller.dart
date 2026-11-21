@@ -78,58 +78,71 @@ class FullSignalsController extends WireController {
   @override
   void onInit() {
     super.onInit();
-    counter = createSignal<int>(1, debugLabel: 'full_counter');
-    lazyNote = createLazySignal<String>(debugLabel: 'full_lazy');
-    version = createReadonlySignal<String>('v1.0.0', debugLabel: 'full_ver');
+    counter = createSignal<int>(
+      1,
+      options: const SignalOptions<int>(name: 'full_counter'),
+    );
+    lazyNote = createLazySignal<String>(
+      options: const SignalOptions<String>(name: 'full_lazy'),
+    );
+    version = createReadonlySignal<String>(
+      'v1.0.0',
+      options: const SignalOptions<String>(name: 'full_ver'),
+    );
     tripled = createComputed<int>(
       () => counter.value * 3,
-      debugLabel: 'full_tripled',
+      options: const ComputedOptions<int>(name: 'full_tripled'),
     );
-    items = createListSignal<String>(<String>['a'], debugLabel: 'full_items');
+    items = createListSignal<String>(<String>[
+      'a',
+    ], options: const ListSignalOptions<String>(name: 'full_items'));
     selectedTags = createSetSignal<String>(<String>{
       'core',
-    }, debugLabel: 'full_tags');
+    }, options: const SetSignalOptions<String>(name: 'full_tags'));
     inventory = createMapSignal<String, int>(<String, int>{
       'apple': 2,
-    }, debugLabel: 'full_inventory');
+    }, options: const MapSignalOptions<String, int>(name: 'full_inventory'));
     numbers = createIterableSignal<int>(<int>[
       10,
       20,
-    ], debugLabel: 'full_numbers');
+    ], options: const IterableSignalOptions<int>(name: 'full_numbers'));
     jobQueue = createQueueSignal<String>(
       Queue<String>.from(<String>['job1']),
-      debugLabel: 'full_queue',
+      options: const QueueSignalOptions<String>(name: 'full_queue'),
     );
     draft = createChangeStackSignal<String>(
       'v1',
       limit: 5,
-      debugLabel: 'full_draft',
+      options: const ChangeSignalOptions<String>(name: 'full_draft'),
     );
-    trackedScore = createTrackedSignal<int>(100, debugLabel: 'full_tracked');
+    trackedScore = createTrackedSignal<int>(
+      100,
+      options: const TrackedSignalOptions<int>(name: 'full_tracked'),
+    );
     manualAsync = createAsyncSignal<String>(
       const AsyncData<String>('ready'),
-      debugLabel: 'full_manual_async',
+      options: const AsyncSignalOptions<String>(name: 'full_manual_async'),
     );
     fetchedProfile = createFutureSignal<String>(
       () async => 'profile_ok',
-      debugLabel: 'full_future',
+      options: const AsyncSignalOptions<String>(name: 'full_future'),
     );
     liveTicks = createStreamSignal<int>(
       () => tickStreamController.stream,
-      debugLabel: 'full_stream',
+      options: const AsyncSignalOptions<int>(name: 'full_stream'),
     );
     asyncLabel = createComputedAsync<String>(() async {
       final int current = counter.value;
       return 'label_$current';
-    }, debugLabel: 'full_computed_async');
+    }, options: const AsyncSignalOptions<String>(name: 'full_computed_async'));
     asyncSum = createComputedFrom<int, int>(
       <ReadonlySignal<int>>[counter],
       (List<int> args) async => args.first + 10,
-      debugLabel: 'full_computed_from',
+      options: const AsyncSignalOptions<int>(name: 'full_computed_from'),
     );
     connectedStatus = createSignal<String>(
       'idle',
-      debugLabel: 'full_connected',
+      options: const SignalOptions<String>(name: 'full_connected'),
     );
     statusConnect = createConnect<String, String>(connectedStatus);
     statusConnect.from(statusStreamController.stream);

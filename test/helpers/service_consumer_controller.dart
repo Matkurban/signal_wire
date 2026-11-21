@@ -18,6 +18,6 @@ class ServiceConsumerController extends WireController {
     final TestService service = Wire.find<TestService>();
     createEffect(() {
       observedUsers.add(service.currentUser.value);
-    }, debugLabel: 'service_consumer_effect');
+    }, options: const EffectOptions(name: 'service_consumer_effect'));
   }
 }
