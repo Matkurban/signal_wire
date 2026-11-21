@@ -49,7 +49,11 @@ class TaskBoardController extends WireController {
   void onInit() {
     super.onInit();
     tasks = createListSignal<WorkTask>(<WorkTask>[
-      const WorkTask(id: 'T-1', title: 'Design WireLogger pipeline', tag: 'API'),
+      const WorkTask(
+        id: 'T-1',
+        title: 'Design WireLogger pipeline',
+        tag: 'API',
+      ),
       const WorkTask(
         id: 'T-2',
         title: 'Build TaskBoard WireView UI',

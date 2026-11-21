@@ -39,35 +39,28 @@ void main() {
       expect(disposable.closeCount, 1);
     });
 
-    test(
-      'onClose 自动释放 createSignal、createComputed、createEffect 与 autoDispose (LIFO)',
-      () {
-        final TestDisposable disposable = Wire.put<TestDisposable>(
-          TestDisposable(),
-        );
+    test('onClose 自动释放 createSignal、createComputed、createEffect 与 autoDispose (LIFO)', () {
+      final TestDisposable disposable = Wire.put<TestDisposable>(
+        TestDisposable(),
+      );
 
-        expect(disposable.count.value, 0);
-        expect(disposable.doubled.value, 0);
-        expect(disposable.effectLog, <int>[0]);
+      expect(disposable.count.value, 0);
+      expect(disposable.doubled.value, 0);
+      expect(disposable.effectLog, <int>[0]);
 
-        disposable.count.value = 3;
-        expect(disposable.doubled.value, 6);
-        expect(disposable.effectLog, <int>[0, 3]);
+      disposable.count.value = 3;
+      expect(disposable.doubled.value, 6);
+      expect(disposable.effectLog, <int>[0, 3]);
 
-        Wire.delete<TestDisposable>();
+      Wire.delete<TestDisposable>();
 
-        // 信号与计算信号应已标记为 disposed。
-        expect(disposable.count.disposed, isTrue);
-        expect(disposable.doubled.disposed, isTrue);
+      // 信号与计算信号应已标记为 disposed。
+      expect(disposable.count.disposed, isTrue);
+      expect(disposable.doubled.disposed, isTrue);
 
-        // 自定义清理回调应在 onClose 之后按 LIFO 逆序执行。
-        expect(disposable.cleanupOrder, <String>[
-          'onClose',
-          'second',
-          'first',
-        ]);
-      },
-    );
+      // 自定义清理回调应在 onClose 之后按 LIFO 逆序执行。
+      expect(disposable.cleanupOrder, <String>['onClose', 'second', 'first']);
+    });
 
     test('提前手动停止 createEffect 后，onClose 再次清理安全无异常 / idempotent early effect cleanup', () {
       final TestDisposable disposable = Wire.put<TestDisposable>(
@@ -97,16 +90,19 @@ void main() {
       expect(disposable.cleanupOrder.last, 'late_cleanup');
     });
 
-    test('子类 onClose 抛异常时仍应完整释放 autoDispose 资源 / cleans up even if onClose throws', () {
-      final ThrowingCloseDisposable disposable =
-          Wire.put<ThrowingCloseDisposable>(ThrowingCloseDisposable());
+    test(
+      '子类 onClose 抛异常时仍应完整释放 autoDispose 资源 / cleans up even if onClose throws',
+      () {
+        final ThrowingCloseDisposable disposable =
+            Wire.put<ThrowingCloseDisposable>(ThrowingCloseDisposable());
 
-      expect(
-        () => Wire.delete<ThrowingCloseDisposable>(),
-        throwsA(isA<StateError>()),
-      );
-      expect(disposable.isClosed, isTrue);
-      expect(disposable.cleaned, isTrue);
-    });
+        expect(
+          () => Wire.delete<ThrowingCloseDisposable>(),
+          throwsA(isA<StateError>()),
+        );
+        expect(disposable.isClosed, isTrue);
+        expect(disposable.cleaned, isTrue);
+      },
+    );
   });
 }

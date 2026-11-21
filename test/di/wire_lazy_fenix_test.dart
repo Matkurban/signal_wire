@@ -43,7 +43,10 @@ void main() {
       expect(Wire.delete<TestController>(), isTrue);
       expect(ctrl.isClosed, isTrue);
       expect(Wire.isRegistered<TestController>(), isFalse);
-      expect(() => Wire.find<TestController>(), throwsA(isA<WireNotFoundException>()));
+      expect(
+        () => Wire.find<TestController>(),
+        throwsA(isA<WireNotFoundException>()),
+      );
     });
 
     test('fenix: true 时普通 delete 销毁旧实例并保留工厂，再次 find 自动重建全新实例', () {

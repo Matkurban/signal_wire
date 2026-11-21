@@ -86,18 +86,16 @@ class FullSignalsController extends WireController {
       debugLabel: 'full_tripled',
     );
     items = createListSignal<String>(<String>['a'], debugLabel: 'full_items');
-    selectedTags = createSetSignal<String>(
-      <String>{'core'},
-      debugLabel: 'full_tags',
-    );
-    inventory = createMapSignal<String, int>(
-      <String, int>{'apple': 2},
-      debugLabel: 'full_inventory',
-    );
-    numbers = createIterableSignal<int>(
-      <int>[10, 20],
-      debugLabel: 'full_numbers',
-    );
+    selectedTags = createSetSignal<String>(<String>{
+      'core',
+    }, debugLabel: 'full_tags');
+    inventory = createMapSignal<String, int>(<String, int>{
+      'apple': 2,
+    }, debugLabel: 'full_inventory');
+    numbers = createIterableSignal<int>(<int>[
+      10,
+      20,
+    ], debugLabel: 'full_numbers');
     jobQueue = createQueueSignal<String>(
       Queue<String>.from(<String>['job1']),
       debugLabel: 'full_queue',

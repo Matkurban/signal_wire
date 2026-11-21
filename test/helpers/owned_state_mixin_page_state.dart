@@ -14,7 +14,8 @@ class OwnedStateMixinPageState extends State<OwnedStateMixinPage>
   String? get tag => widget.controllerTag;
 
   @override
-  TestController wire() => TestController(label: widget.controllerTag ?? 'mixin');
+  TestController wire() =>
+      TestController(label: widget.controllerTag ?? 'mixin');
 
   @override
   Widget build(BuildContext context) {

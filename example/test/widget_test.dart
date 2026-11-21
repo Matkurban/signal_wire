@@ -67,50 +67,51 @@ void main() {
     expect(Wire.isRegistered<AuthService>(), isTrue);
   });
 
-  testWidgets('端到端验证 Mode B (SignalsMixin + WireStateMixin) 点击 Add Score 与撤销重做即时响应', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(const SignalWireExampleApp());
+  testWidgets(
+    '端到端验证 Mode B (SignalsMixin + WireStateMixin) 点击 Add Score 与撤销重做即时响应',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const SignalWireExampleApp());
 
-    await tester.tap(find.byKey(const Key('nav_mode_b')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('nav_mode_b')));
+      await tester.pumpAndSettle();
 
-    expect(Wire.isRegistered<DraftEditorController>(), isTrue);
-    expect(find.text('Controller Score: 10'), findsOneWidget);
-    expect(find.text('Local Step Signal: 5'), findsOneWidget);
+      expect(Wire.isRegistered<DraftEditorController>(), isTrue);
+      expect(find.text('Controller Score: 10'), findsOneWidget);
+      expect(find.text('Local Step Signal: 5'), findsOneWidget);
 
-    // 点击 Add Score（默认步长 5）应立即更新为 15。
-    await tester.tap(find.byKey(const Key('btn_add_score')));
-    await tester.pump();
-    expect(find.text('Controller Score: 15'), findsOneWidget);
+      // 点击 Add Score（默认步长 5）应立即更新为 15。
+      await tester.tap(find.byKey(const Key('btn_add_score')));
+      await tester.pump();
+      expect(find.text('Controller Score: 15'), findsOneWidget);
 
-    // 切换局部步长为 10，再次点击 Add Score 应立即更新为 25。
-    await tester.tap(find.byKey(const Key('btn_toggle_step')));
-    await tester.pump();
-    expect(find.text('Local Step Signal: 10'), findsOneWidget);
+      // 切换局部步长为 10，再次点击 Add Score 应立即更新为 25。
+      await tester.tap(find.byKey(const Key('btn_toggle_step')));
+      await tester.pump();
+      expect(find.text('Local Step Signal: 10'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('btn_add_score')));
-    await tester.pump();
-    expect(find.text('Controller Score: 25'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('btn_add_score')));
+      await tester.pump();
+      expect(find.text('Controller Score: 25'), findsOneWidget);
 
-    // 测试 ChangeStackSignal 追加快照、Undo 与 Redo。
-    await tester.tap(find.byKey(const Key('btn_append_draft')));
-    await tester.pump();
-    expect(find.text('Draft: Initial spec v1 -> rev2'), findsOneWidget);
+      // 测试 ChangeStackSignal 追加快照、Undo 与 Redo。
+      await tester.tap(find.byKey(const Key('btn_append_draft')));
+      await tester.pump();
+      expect(find.text('Draft: Initial spec v1 -> rev2'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('btn_undo_draft')));
-    await tester.pump();
-    expect(find.text('Draft: Initial spec v1'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('btn_undo_draft')));
+      await tester.pump();
+      expect(find.text('Draft: Initial spec v1'), findsOneWidget);
 
-    await tester.tap(find.byKey(const Key('btn_redo_draft')));
-    await tester.pump();
-    expect(find.text('Draft: Initial spec v1 -> rev2'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('btn_redo_draft')));
+      await tester.pump();
+      expect(find.text('Draft: Initial spec v1 -> rev2'), findsOneWidget);
 
-    // 返回首页自动释放控制器。
-    await tester.pageBack();
-    await tester.pumpAndSettle();
-    expect(Wire.isRegistered<DraftEditorController>(), isFalse);
-  });
+      // 返回首页自动释放控制器。
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(Wire.isRegistered<DraftEditorController>(), isFalse);
+    },
+  );
 
   testWidgets('端到端验证 Mode C (WireScope) 动态切换房间 tag 与 force: true 强替换界面零异常', (
     WidgetTester tester,

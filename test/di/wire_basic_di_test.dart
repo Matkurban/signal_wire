@@ -40,7 +40,11 @@ void main() {
         () => Wire.find<TestController>(),
         throwsA(
           isA<WireNotFoundException>()
-              .having((WireNotFoundException e) => e.type, 'type', TestController)
+              .having(
+                (WireNotFoundException e) => e.type,
+                'type',
+                TestController,
+              )
               .having((WireNotFoundException e) => e.tag, 'tag', isNull)
               .having(
                 (WireNotFoundException e) => e.toString(),

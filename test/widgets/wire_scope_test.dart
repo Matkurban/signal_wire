@@ -15,9 +15,7 @@ void main() {
   });
 
   group('模式 C：WireScope / Mode C: WireScope', () {
-    testWidgets('builder 模式下挂载创建、响应式更新并在卸载时自动回收', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('builder 模式下挂载创建、响应式更新并在卸载时自动回收', (WidgetTester tester) async {
       TestController? scopedCtrl;
 
       await tester.pumpWidget(
